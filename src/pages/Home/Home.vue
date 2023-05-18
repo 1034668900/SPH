@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div >
     <!-- 三级联动全局组件 -->
-    <type-nav></type-nav>
+    <TypeNav></TypeNav>
     <list-container></list-container>
     <Recommend></Recommend>
     <Rank></Rank>
@@ -30,5 +30,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>

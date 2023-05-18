@@ -16,10 +16,7 @@ export default {
   components: {
     Header,
     Footer,
-  },
-  mounted() {
-    console.log(this.$route);
-  },
+  }
 };
 </script>
 
