@@ -4,8 +4,10 @@
       <!-- 事件委派 -->
       <div @mouseleave="resetIndex">
         <h2 class="all">全部商品分类</h2>
+        <!-- 三级联动 -->
         <div class="sort">
-          <div class="all-sort-list2">
+          <!-- 绑定路由跳转事件--事件委派 -->
+          <div class="all-sort-list2" @click="goSearch($event)">
             <div
               :class="{ curStyle: currentIndex === index }"
               class="item"
@@ -13,11 +15,18 @@
               :key="c1.categoryId"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a style="text-decoration: none" href="">{{
-                  c1.categoryName
-                }}</a>
+                <a
+                  style="text-decoration: none"
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
+                >
               </h3>
-              <div class="item-list clearfix">
+              <!-- 二级、三级菜单 -->
+              <div
+                :style="{ display: currentIndex == index ? 'block' : 'none' }"
+                class="item-list clearfix"
+              >
                 <div class="subitem">
                   <dl
                     class="fore"
@@ -25,11 +34,19 @@
                     :key="c2.categoryId"
                   >
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a
+                        :data-category2Id="c2.categoryId"
+                        :data-categoryName="c2.categoryName"
+                        >{{ c2.categoryName }}</a
+                      >
                     </dt>
                     <dd>
                       <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a
+                          :data-category3Id="c3.categoryId"
+                          :data-categoryName="c3.categoryName"
+                          >{{ c3.categoryName }}</a
+                        >
                       </em>
                     </dd>
                   </dl>
@@ -55,6 +72,8 @@
 
 <script>
 import { mapState } from "vuex";
+// 引入lodash
+import throttle from "lodash/throttle";
 
 export default {
   data() {
@@ -75,12 +94,45 @@ export default {
   },
   methods: {
     // 鼠标移入一级菜单事件
-    changeIndex(index) {
+    /*     changeIndex(index) {
+      this.currentIndex = index; 
+    }, */
+    // 鼠标移入事件节流(借用第三方库)
+    changeIndex: throttle(function (index) {
       this.currentIndex = index;
-    },
+    }, 50),
     // 鼠标离开一级菜单事件
     resetIndex() {
       this.currentIndex = -1;
+    },
+
+    // 路由跳转事件
+    goSearch(event) {
+      // 拿到触发的元素对象
+      let element = event.target;
+      // 利用dataset属性获取元素对象上的自定义属性并解构 -- 浏览器自动将自定义属性转换为小写
+      let { categoryname, category1id, category2id, category3id } =
+        element.dataset;
+
+      // 判断是否含有categoryname  --> 为了判断是不是a标签触发的事件
+      if (categoryname) {
+        // 准备路由跳转的对象
+        let location = { name: "search" };
+        // 准备携带的参数，携带的具体Id此处无法判断，经判断后再添加
+        let query = { categoryName: categoryname };
+        if (category1id) {
+          query.category1Id = category1id;
+        } else if (category2id) {
+          query.category2Id = category2id;
+        } else if (category3id) {
+          query.category3Id = category3id;
+        }
+
+        // 将参数合并到路由跳转对象中
+        location.query = query;
+        // 进行路由跳转
+        this.$router.push(location);
+      }
     },
   },
 };
@@ -199,15 +251,12 @@ export default {
               }
             }
           }
-
-          &:hover {
-            .item-list {
-              display: block;
-            }
-          }
         }
       }
     }
   }
+}
+.type-nav:hover{
+  cursor: pointer;
 }
 </style>
