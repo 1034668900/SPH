@@ -44,19 +44,24 @@
               <img src="./images/floor-1-1.png" />
             </div>
             <div class="floorBanner">
-              <div class="swiper-container" id="floor1Swiper">
+              <div class="swiper-container" ref="floor1Swiper">
                 <div class="swiper-wrapper">
                   <div class="swiper-slide">
                     <img src="./images/floor-1-b01.png" />
                   </div>
-  
+                  <div class="swiper-slide">
+                    <img src="./images/floor-1-b02.png" />
+                  </div>
+                  <div class="swiper-slide">
+                    <img src="./images/floor-1-b03.png" />
+                  </div>
                 </div>
                 <!-- 如果需要分页器 -->
                 <div class="swiper-pagination"></div>
 
                 <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
+                <!-- <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div> -->
               </div>
             </div>
             <div class="split">
@@ -88,7 +93,29 @@
 </template>
 
 <script>
-export default {};
+// 引入轮播图
+import Swiper from "swiper";
+export default {
+  mounted() {
+    new Swiper(this.$refs.floor1Swiper, {
+      // Optional parameters
+      loop: true,
+      
+      // navigation: {
+      //   nextEl: ".swiper-button-next",
+      //   prevEl: ".swiper-button-prev",
+      // },
+
+      // If we need pagination
+      pagination: {
+        el: ".swiper-pagination",
+        type: "bullets",
+        clickable: true,
+      },
+      autoplay:true
+    });
+  },
+};
 </script>
 
 <style scoped lang="less">

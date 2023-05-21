@@ -2,59 +2,61 @@
   <div class="type-nav">
     <div class="container">
       <!-- 事件委派 -->
-      <div @mouseleave="resetIndex">
+      <div @mouseleave="resetIndex" @mouseenter="isShowMenu">
         <h2 class="all">全部商品分类</h2>
-        <!-- 三级联动 -->
-        <div class="sort">
-          <!-- 绑定路由跳转事件--事件委派 -->
-          <div class="all-sort-list2" @click="goSearch($event)">
-            <div
-              :class="{ curStyle: currentIndex === index }"
-              class="item"
-              v-for="(c1, index) in categoryList"
-              :key="c1.categoryId"
-            >
-              <h3 @mouseenter="changeIndex(index)">
-                <a
-                  style="text-decoration: none"
-                  :data-categoryName="c1.categoryName"
-                  :data-category1Id="c1.categoryId"
-                  >{{ c1.categoryName }}</a
-                >
-              </h3>
-              <!-- 二级、三级菜单 -->
+        <transition name="sort">
+          <!-- 三级联动 -->
+          <div class="sort" v-show="isShow">
+            <!-- 绑定路由跳转事件--事件委派 -->
+            <div class="all-sort-list2" @click="goSearch($event)">
               <div
-                :style="{ display: currentIndex == index ? 'block' : 'none' }"
-                class="item-list clearfix"
+                :class="{ curStyle: currentIndex === index }"
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
               >
-                <div class="subitem">
-                  <dl
-                    class="fore"
-                    v-for="c2 in c1.categoryChild"
-                    :key="c2.categoryId"
+                <h3 @mouseenter="changeIndex(index)">
+                  <a
+                    style="text-decoration: none"
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
                   >
-                    <dt>
-                      <a
-                        :data-category2Id="c2.categoryId"
-                        :data-categoryName="c2.categoryName"
-                        >{{ c2.categoryName }}</a
-                      >
-                    </dt>
-                    <dd>
-                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                </h3>
+                <!-- 二级、三级菜单 -->
+                <div
+                  :style="{ display: currentIndex == index ? 'block' : 'none' }"
+                  class="item-list clearfix"
+                >
+                  <div class="subitem">
+                    <dl
+                      class="fore"
+                      v-for="c2 in c1.categoryChild"
+                      :key="c2.categoryId"
+                    >
+                      <dt>
                         <a
-                          :data-category3Id="c3.categoryId"
-                          :data-categoryName="c3.categoryName"
-                          >{{ c3.categoryName }}</a
+                          :data-category2Id="c2.categoryId"
+                          :data-categoryName="c2.categoryName"
+                          >{{ c2.categoryName }}</a
                         >
-                      </em>
-                    </dd>
-                  </dl>
+                      </dt>
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                          <a
+                            :data-category3Id="c3.categoryId"
+                            :data-categoryName="c3.categoryName"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -80,12 +82,17 @@ export default {
     return {
       // 记录鼠标当前悬停的下标 -- 为了保证初始时一级菜单没有背景颜色，currentIndex初始值要给一个不在一级菜单数量内的数字
       currentIndex: -1,
+      // 控制菜单是否显示
+      isShow: true,
     };
   },
   name: "TypeNav",
   // 应该在该三级联动组件挂载完毕时就向actions派发请求
   mounted() {
-    this.$store.dispatch("categoryList");
+    // 在路由挂载完毕时判断是否进入的是搜索组件，搜索组件里默认菜单是关闭的
+    if (this.$route.path !== "/home") {
+      this.isShow = false;
+    }
   },
   computed: {
     ...mapState({
@@ -104,6 +111,14 @@ export default {
     // 鼠标离开一级菜单事件
     resetIndex() {
       this.currentIndex = -1;
+      if (this.$route.path !== "/home") {
+        this.isShow = false;
+      }
+    },
+
+    // 鼠标进入 “全部商品分类”div后菜单显示
+    isShowMenu() {
+      this.isShow = true;
     },
 
     // 路由跳转事件
@@ -130,6 +145,10 @@ export default {
 
         // 将参数合并到路由跳转对象中
         location.query = query;
+        // 判断路由中是否有params参数,有的话就将其合并
+        if(this.$route.params){
+          location.params = this.$route.params
+        }
         // 进行路由跳转
         this.$router.push(location);
       }
@@ -254,9 +273,38 @@ export default {
         }
       }
     }
+
+    // sort进入离开的过渡
+    //进入的起点
+    .sort-enter{
+      height: 0;
+    }
+    // 进入的终点
+    .sort-enter-to{
+      height: 461px;
+    }
+    // 进入过程
+    .sort-enter-active{
+      transition: .2s linear;
+      overflow: hidden;
+    }
+
+    // sort离开的起点
+    .sort-leave{
+      height: 461px;
+    }
+    // 离开的终点
+    .sort-leave-to{
+      height: 0;
+    }
+    // 离开过程的效果
+    .sort-leave-active{
+      transition: .2s linear;
+      overflow: hidden;
+    }
   }
 }
-.type-nav:hover{
+.type-nav:hover {
   cursor: pointer;
 }
 </style>

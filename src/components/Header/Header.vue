@@ -60,13 +60,17 @@ export default {
     // push方法返回的是一个promise，
     // 通过传入两个不做处理的回调，解决控制台报跳转错误的问题(编程式路由重复跳转到当前路由(参数不变)时会报错)
     goSearch(){
-      this.$router.push({
-        name:'search',
-        params:{keyword:this.keyword},
-        query:{
-          keyword:this.keyword
-        }
-      })
+      // 创建一个跳转对象
+      let location = {
+        name: 'search',
+        params: {keyword:this.keyword || undefined}
+      }
+      // 判断当前路由是否含有query参数
+      if(this.$route.query){
+        location.query = this.$route.query
+
+      }
+      this.$router.push(location);
     }
   }
 };

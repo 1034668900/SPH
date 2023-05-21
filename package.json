@@ -20,6 +20,7 @@
     "@vitejs/plugin-legacy": "^2.0.0",
     "@vitejs/plugin-vue2": "^1.1.2",
     "lodash": "^4.17.21",
+    "swiper": "^5.4.5",
     "terser": "^5.14.2",
     "vite": "^3.2.6"
   }
