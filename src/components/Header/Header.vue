@@ -72,7 +72,14 @@ export default {
       }
       this.$router.push(location);
     }
+  },
+  mounted(){
+    // 在全局事件总线上绑定清除搜索框的函数
+    this.$bus.$on('clearSearchValue', () => {
+      this.keyword = ''
+    })
   }
+
 };
 </script>
 

@@ -5,7 +5,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 // 引入路由组件
 import Home from '../pages/Home/Home.vue'
-import Search from '../pages/Search/Search.vue'
+import Search from '../pages/Search/index.vue'
 import Login from '../pages/Login/Login.vue'
 import Register from '../pages/Register/Register.vue'
 

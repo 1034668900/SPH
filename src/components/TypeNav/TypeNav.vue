@@ -96,6 +96,7 @@ export default {
   },
   computed: {
     ...mapState({
+      // 这里的state是总仓库的state
       categoryList: (state) => state.home.categoryList.data,
     }),
   },

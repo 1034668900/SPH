@@ -15,8 +15,9 @@ Vue.component(TypeNav.name, TypeNav)
 
 // 取消Vue生产提示
 Vue.config.productionTip = false
-
+// 请求三级联动列表数据
 reqCategoryList()
+
 
 new Vue({
     render: h => h(App),
@@ -24,6 +25,10 @@ new Vue({
     router,
     // 注册仓库
     store,
+    // 配置全局事件总线$bus -- 将vm对象存放在Vue的原型对象上
+    beforeCreate(){
+        Vue.prototype.$bus = this
+    },
     mounted() {
         // 派发actions，获取三级联动组件菜单数据
         this.$store.dispatch("categoryList");
