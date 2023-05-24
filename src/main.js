@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 // 引入三级联动组件
 import TypeNav from './components/TypeNav/TypeNav.vue'
+// 引入分页器组件
+import Pagination from './components/Pagination/index.vue'
 // 引入仓库
 import store from './store'
 // 引入路由
@@ -14,7 +16,8 @@ import '../public/alIcon/iconfont.css'
 
 // 注册三级联动组件为全局组件
 Vue.component(TypeNav.name, TypeNav)
-
+// 注册分页器组件为全局组件
+Vue.component(Pagination.name, Pagination)
 // 取消Vue生产提示
 Vue.config.productionTip = false
 // 请求三级联动列表数据

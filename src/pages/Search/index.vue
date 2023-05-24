@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TypeNav  />
+    <TypeNav />
     <div class="main">
       <div class="py-container">
         <!--bread 面包屑-带有 x 的结构-->
@@ -13,7 +13,8 @@
           <ul class="fl sui-tag">
             <!-- 分类的面包屑 -->
             <li class="with-x" v-if="searchParams.categoryName">
-              {{ searchParams.categoryName }}<i @click="removeCategoryName">×</i>
+              {{ searchParams.categoryName
+              }}<i @click="removeCategoryName">×</i>
             </li>
             <!-- 关键字的面包屑 -->
             <li class="with-x" v-if="searchParams.keyword">
@@ -21,30 +22,45 @@
             </li>
             <!-- 品牌的面包屑 -->
             <li class="with-x" v-if="searchParams.trademark">
-              {{ searchParams.trademark.split(':')[1] }}<i @click="removeTrademark">×</i>
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTrademark">×</i>
             </li>
-            <li class="with-x" v-for="(attr,index) in searchParams.props" :key="index">
-              {{ attr.split(':')[1] }}<i @click="removeAttr(index)">×</i>
+            <li
+              class="with-x"
+              v-for="(attr, index) in searchParams.props"
+              :key="index"
+            >
+              {{ attr.split(":")[1] }}<i @click="removeAttr(index)">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @tradeMarkInfo="tradeMarkInfo" @attrInfo="attrInfo"/>
+        <SearchSelector @tradeMarkInfo="tradeMarkInfo" @attrInfo="attrInfo" />
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li :class="{active: isOrderOne}">
-                  <a  @click="changeOrder(1)">综合
-                    <span v-show="isOrderOne" class="iconfont" :class="{'icon-up':isIconUp, 'icon-down': isIconDown}"></span>
+                <li :class="{ active: isOrderOne }">
+                  <a @click="changeOrder(1)"
+                    >综合
+                    <span
+                      v-show="isOrderOne"
+                      class="iconfont"
+                      :class="{ 'icon-up': isIconUp, 'icon-down': isIconDown }"
+                    ></span>
                   </a>
                 </li>
-                <li :class="{active: isOrderTwo}">
-                  <a  @click="changeOrder(2)">价格
-                    <span v-show="isOrderTwo" class="iconfont" :class="{'icon-up':isIconUp, 'icon-down': isIconDown}"></span>
+                <li :class="{ active: isOrderTwo }">
+                  <a @click="changeOrder(2)"
+                    >价格
+                    <span
+                      v-show="isOrderTwo"
+                      class="iconfont"
+                      :class="{ 'icon-up': isIconUp, 'icon-down': isIconDown }"
+                    ></span>
                   </a>
                 </li>
               </ul>
@@ -94,35 +110,13 @@
             </ul>
           </div>
           <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPageNo="getPageNo"
+          />
         </div>
       </div>
     </div>
@@ -130,7 +124,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector.vue";
 export default {
   name: "search",
@@ -178,19 +172,24 @@ export default {
   },
   computed: {
     ...mapGetters(["goodsList"]),
+    // 获取商品列表总数total
+    ...mapState({
+      total: (state) => state.search.searchList.total,
+    }),
+
     // 判断searchParams.order 里包含1还是2
-    isOrderOne(){
-      return this.searchParams.order.indexOf('1') != '-1'
+    isOrderOne() {
+      return this.searchParams.order.indexOf("1") != "-1";
     },
-    isOrderTwo(){
-      return this.searchParams.order.indexOf('2') != '-1'
+    isOrderTwo() {
+      return this.searchParams.order.indexOf("2") != "-1";
     },
-    isIconUp(){
-      return this.searchParams.order.indexOf('asc') != '-1'
+    isIconUp() {
+      return this.searchParams.order.indexOf("asc") != "-1";
     },
-    isIconDown(){
-      return this.searchParams.order.indexOf('desc') != '-1'
-    }
+    isIconDown() {
+      return this.searchParams.order.indexOf("desc") != "-1";
+    },
   },
   methods: {
     // getSearchList请求执行的次数可能会有许多，因此将其封装为一个函数
@@ -225,60 +224,70 @@ export default {
       this.searchParams.keyword = undefined;
       this.$router.push({
         name: "search",
-        query: this.$route.query
+        query: this.$route.query,
       });
       this.getSearchResult();
       // 置空Header组件搜索框(全局事件总线)
-      this.$bus.$emit('clearSearchValue')
-      
+      this.$bus.$emit("clearSearchValue");
     },
 
     // 处理品牌信息的回调
-    tradeMarkInfo(tm){
+    tradeMarkInfo(tm) {
       // 整理请求参数
-      this.searchParams.trademark = `${tm.tmId}:${tm.tmName}`
+      this.searchParams.trademark = `${tm.tmId}:${tm.tmName}`;
       // 发起请求
-      this.getSearchResult()
+      this.getSearchResult();
     },
     // 移除品牌信息的面包屑
-    removeTrademark(){
-      this.searchParams.trademark = undefined
+    removeTrademark() {
+      this.searchParams.trademark = undefined;
       // 再次发起请求
-      this.getSearchResult()
-
+      this.getSearchResult();
     },
 
     // 平台售卖属性的回调
-    attrInfo(attr, attrValue){
-      console.log("我是父组件",attr,attrValue);
+    attrInfo(attr, attrValue) {
+      console.log("我是父组件", attr, attrValue);
       // 整理参数  格式： ["属性ID:属性值:属性名"]
-      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
       // 将参数添加到数组(先判断是否已有该参数)
-      if(this.searchParams.props.indexOf(props) == -1) this.searchParams.props.push(props)
+      if (this.searchParams.props.indexOf(props) == -1)
+        this.searchParams.props.push(props);
       // 参数整理完毕后再次发起请求
-      this.getSearchResult()
+      this.getSearchResult();
     },
     // 平台售卖属性面包屑删除
-    removeAttr(index){
+    removeAttr(index) {
       // 从searchParams里的props数组中删除index项
-      this.searchParams.props.splice(index,1)
+      this.searchParams.props.splice(index, 1);
       // 此时请求参数发生改变，再次发起请求
-      this.getSearchResult()
+      this.getSearchResult();
     },
 
     // 综合和价格按钮排序
     /* 
       flag： 判断用户点击的是谁    综合：1   价格：2   用户点击时传递进来的
     */
-    changeOrder(flag){
-      if(this.isIconUp){
-        this.searchParams.order = `${flag}:desc`
-      }else if(this.isIconDown){
-        this.searchParams.order = `${flag}:asc`
+    changeOrder(flag) {
+      if (this.isIconUp) {
+        this.searchParams.order = `${flag}:desc`;
+      } else if (this.isIconDown) {
+        this.searchParams.order = `${flag}:asc`;
       }
 
-      this.getSearchResult()
-    }
+      this.getSearchResult();
+    },
+
+    // 自定义事件的回调 -- > 获取分页器的当前页数pageNo
+    getPageNo(pageNo,totalPage) {
+      // 更新pageNo
+      if (pageNo > 0 && pageNo <= totalPage) {
+        this.searchParams.pageNo = pageNo;
+        // 再次发起请求
+        this.getSearchResult();
+        
+      }
+    },
   },
   watch: {
     // 由于每次请求SearchList重新发起请求时，路由都会发生改变，因此可以通过监听路由的变化来实现
@@ -535,93 +544,6 @@ export default {
                 }
               }
             }
-          }
-        }
-      }
-
-      .page {
-        width: 733px;
-        height: 66px;
-        overflow: hidden;
-        float: right;
-
-        .sui-pagination {
-          margin: 18px 0;
-
-          ul {
-            margin-left: 0;
-            margin-bottom: 0;
-            vertical-align: middle;
-            width: 490px;
-            float: left;
-
-            li {
-              line-height: 18px;
-              display: inline-block;
-
-              a {
-                position: relative;
-                float: left;
-                line-height: 18px;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #e0e9ee;
-                margin-left: -1px;
-                font-size: 14px;
-                padding: 9px 18px;
-                color: #333;
-              }
-
-              &.active {
-                a {
-                  background-color: #fff;
-                  color: #e1251b;
-                  border-color: #fff;
-                  cursor: default;
-                }
-              }
-
-              &.prev {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-
-              &.disabled {
-                a {
-                  color: #999;
-                  cursor: default;
-                }
-              }
-
-              &.dotted {
-                span {
-                  margin-left: -1px;
-                  position: relative;
-                  float: left;
-                  line-height: 18px;
-                  text-decoration: none;
-                  background-color: #fff;
-                  font-size: 14px;
-                  border: 0;
-                  padding: 9px 18px;
-                  color: #333;
-                }
-              }
-
-              &.next {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-            }
-          }
-
-          div {
-            color: #333;
-            font-size: 14px;
-            float: right;
-            width: 241px;
           }
         }
       }
