@@ -9,6 +9,8 @@ import router from './router/index'
 import { reqCategoryList } from './api/index'
 // 引入轮播图样式
 import '../node_modules/swiper/css/swiper.css'
+// 引入阿里图标库样式
+import '../public/alIcon/iconfont.css'
 
 // 注册三级联动组件为全局组件
 Vue.component(TypeNav.name, TypeNav)

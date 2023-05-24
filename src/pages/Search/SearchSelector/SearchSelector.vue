@@ -15,12 +15,13 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
+    <!-- 平台售卖属性 -->
     <div class="type-wrap" v-for="attr in attrsList" :key="attr.attrId">
       <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
           <li v-for="(attrValue, index) in attr.attrValueList" :key="index">
-            <a>{{attrValue}}</a>
+            <a @click="attrInfo(attr,attrValue)">{{attrValue}}</a>
           </li>
         </ul>
       </div>
@@ -41,6 +42,11 @@ import {mapGetters} from 'vuex'
       tradeMarkHandler(tm){
         // 触发父组件传递的自定义事件
         this.$emit('tradeMarkInfo',tm)
+      },
+
+      // 点击平台售卖属性的回调
+      attrInfo(attr,attrValue){
+        this.$emit('attrInfo',attr,attrValue)
       }
     }
   }
@@ -68,6 +74,7 @@ import {mapGetters} from 'vuex'
       position: relative;
       border-top: 1px solid #ddd;
       overflow: hidden;
+      cursor: pointer;
 
       .key {
         width: 100px;

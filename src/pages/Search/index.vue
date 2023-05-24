@@ -23,34 +23,29 @@
             <li class="with-x" v-if="searchParams.trademark">
               {{ searchParams.trademark.split(':')[1] }}<i @click="removeTrademark">×</i>
             </li>
+            <li class="with-x" v-for="(attr,index) in searchParams.props" :key="index">
+              {{ attr.split(':')[1] }}<i @click="removeAttr(index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector @tradeMarkInfo="tradeMarkInfo" />
+        <SearchSelector @tradeMarkInfo="tradeMarkInfo" @attrInfo="attrInfo"/>
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active: isOrderOne}">
+                  <a  @click="changeOrder(1)">综合
+                    <span v-show="isOrderOne" class="iconfont" :class="{'icon-up':isIconUp, 'icon-down': isIconDown}"></span>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active: isOrderTwo}">
+                  <a  @click="changeOrder(2)">价格
+                    <span v-show="isOrderTwo" class="iconfont" :class="{'icon-up':isIconUp, 'icon-down': isIconDown}"></span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -154,7 +149,7 @@ export default {
         // 搜索关键字
         keyword: "",
         // 升降序
-        order: "",
+        order: "1:desc",
         // 分页器相关的
         pageNo: 1,
         pageSize: 10,
@@ -183,6 +178,19 @@ export default {
   },
   computed: {
     ...mapGetters(["goodsList"]),
+    // 判断searchParams.order 里包含1还是2
+    isOrderOne(){
+      return this.searchParams.order.indexOf('1') != '-1'
+    },
+    isOrderTwo(){
+      return this.searchParams.order.indexOf('2') != '-1'
+    },
+    isIconUp(){
+      return this.searchParams.order.indexOf('asc') != '-1'
+    },
+    isIconDown(){
+      return this.searchParams.order.indexOf('desc') != '-1'
+    }
   },
   methods: {
     // getSearchList请求执行的次数可能会有许多，因此将其封装为一个函数
@@ -238,6 +246,38 @@ export default {
       // 再次发起请求
       this.getSearchResult()
 
+    },
+
+    // 平台售卖属性的回调
+    attrInfo(attr, attrValue){
+      console.log("我是父组件",attr,attrValue);
+      // 整理参数  格式： ["属性ID:属性值:属性名"]
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`
+      // 将参数添加到数组(先判断是否已有该参数)
+      if(this.searchParams.props.indexOf(props) == -1) this.searchParams.props.push(props)
+      // 参数整理完毕后再次发起请求
+      this.getSearchResult()
+    },
+    // 平台售卖属性面包屑删除
+    removeAttr(index){
+      // 从searchParams里的props数组中删除index项
+      this.searchParams.props.splice(index,1)
+      // 此时请求参数发生改变，再次发起请求
+      this.getSearchResult()
+    },
+
+    // 综合和价格按钮排序
+    /* 
+      flag： 判断用户点击的是谁    综合：1   价格：2   用户点击时传递进来的
+    */
+    changeOrder(flag){
+      if(this.isIconUp){
+        this.searchParams.order = `${flag}:desc`
+      }else if(this.isIconDown){
+        this.searchParams.order = `${flag}:asc`
+      }
+
+      this.getSearchResult()
     }
   },
   watch: {
