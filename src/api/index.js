@@ -18,3 +18,37 @@ export const reqSearchList = (params) => requests({
     // 携带参数
     data: params
 })
+
+// 获取商品详情的API   /api/item/{ skuId }        请求方式：get   
+export const reqGoodInfo = (skuId) => requests({
+    url: `/item/${skuId}`,
+    method: 'GET'
+})
+
+// 将商品添加到购物车或对已有商品进行数量上的改动
+// /api/cart/addToCart/{ skuId }/{ skuNum }  POST
+export const reqAddOrUpdateSkuNum = (skuId,skuNum) => requests({
+    url:`/cart/addToCart/${skuId}/${skuNum}`,
+    method:'POST'
+})
+
+// 获取购物车列表
+// /api/cart/cartList   GET
+export const reqShopCartList = () => requests({
+    url: '/cart/cartList',
+    method: "GET"
+})
+
+// 删除购物车的数据
+// /api/cart/deleteCart/{skuId}  DELETE
+export const deleteShopOfCart = (skuId) => requests({
+    url: `/cart/deleteCart/${skuId}`,
+    method: "DELETE"
+})
+
+// 切换商品选中状态
+// /api/cart/checkCart/{skuID}/{isChecked}   GET
+export const reqChangeChecked = (skuId, isChecked) => requests({
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
+    method: "GET"
+})

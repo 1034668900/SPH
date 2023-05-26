@@ -1,13 +1,10 @@
 // 引入
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import routes from './routes.js'
 // 应用
 Vue.use(VueRouter)
-// 引入路由组件
-import Home from '../pages/Home/Home.vue'
-import Search from '../pages/Search/index.vue'
-import Login from '../pages/Login/Login.vue'
-import Register from '../pages/Register/Register.vue'
+
 
 // 保存原生的push方法
 let originPush = VueRouter.prototype.push
@@ -52,39 +49,10 @@ VueRouter.prototype.replace = function(location, resolve, reject){
 
 // 配置路由
 export default new VueRouter({
-    routes: [
-        {
-            path: '/home',
-            component: Home,
-            meta: {
-                // 是否显示Footer
-                isShowFooter: true
-            }
-        },
-        {
-            name: 'search',
-            path: '/search/:keyword?',
-            component: Search,
-            meta: {
-                // 是否显示Footer
-                isShowFooter: true
-            }
-        },
-        {
-            path: '/login',
-            component: Login
-        },
-        {
-            path: '/register',
-            component: Register
-        },
-        // 重定向 -- 当项目运行起来时，重定向到指定路径
-        {
-            path: '*',
-            redirect: '/home'
-
-        }
-    ]
+    routes,
+    scrollBehavior (to, from, savedPosition) {
+        return { y: 0 }
+      }
 
 })
 

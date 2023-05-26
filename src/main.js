@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 // 引入三级联动组件
-import TypeNav from './components/TypeNav/TypeNav.vue'
+import TypeNav from '@/components/TypeNav/TypeNav.vue'
 // 引入分页器组件
-import Pagination from './components/Pagination/index.vue'
+import Pagination from '@/components/Pagination/index.vue'
 // 引入仓库
-import store from './store'
+import store from '@/store'
 // 引入路由
-import router from './router/index'
-import { reqCategoryList } from './api/index'
+import router from '@/router/index'
+import { reqCategoryList } from '@/api/index'
 // 引入轮播图样式
 import '../node_modules/swiper/css/swiper.css'
 // 引入阿里图标库样式
