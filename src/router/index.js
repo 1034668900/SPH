@@ -74,13 +74,11 @@ route.beforeEach(async (to, from, next) => {
             /* 注意这里不能用userInfo来判断，因为即使是空对象也会转换为true */
             if (userName) {
                 // 有用户名,放行
-                console.log(userName);
                 next()
             } else {
                 try {
                     // 登录了，没有用户名了(刷新就会掉)，重新派发action获取用户信息
                     let result = await store.dispatch('getUserInfo')
-                    console.log(result);
                     // 然后放行
                     next()
                 } catch (error) {

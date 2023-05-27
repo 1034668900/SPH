@@ -7,8 +7,28 @@ import Detail from '@/pages/Detail/index.vue'
 import AddCartSuccess from '@/pages/AddCartSuccess/index.vue'
 import ShopCart from '@/pages/ShopCart/index.vue'
 import Trade from '@/pages/Trade/index.vue'
+import Pay from '@/pages/Pay/index.vue'
+import PaySuccess from '@/pages/PaySuccess/index.vue'
 
 export default [
+    {
+        name:'paysuccess',
+        path: '/paysuccess',
+        component: PaySuccess,
+        meta: {
+            // 是否显示Footer
+            isShowFooter: true
+        }
+    },
+    {
+        name:'pay',
+        path: '/pay',
+        component: Pay,
+        meta: {
+            // 是否显示Footer
+            isShowFooter: true
+        }
+    },
     {
         name:'trade',
         path: '/trade',

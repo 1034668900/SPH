@@ -103,3 +103,23 @@ export const reqOrderInfo = () => requests({
     url: '/order/auth/trade',
     method: 'GET'
 })
+
+// 提交商品订单
+// /api/order/auth/submitOrder?tradeNo={tradeNo}   POST
+export const submitOrder = (tradeNo,data) => requests({
+    url: `/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    data,
+    method: 'POST'
+
+})
+
+// 获取支付信息
+// /api/payment/weixin/createNative/{orderId} GET
+export const reqGetOrderInfo = (orderId) => requests({
+    url : `/payment/weixin/createNative/${orderId}`,
+    method: 'GET'
+})
+
+// 查询订单支付状态的api
+// /api/payment/weixin/queryPayStatus/{orderId}   GET
+export const searchResultPay = (orderId) => requests({url:`/payment/weixin/queryPayStatus/${orderId}`})

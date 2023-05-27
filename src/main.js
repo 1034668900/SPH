@@ -13,7 +13,12 @@ import { reqCategoryList } from '@/api/index'
 import '../node_modules/swiper/css/swiper.css'
 // 引入阿里图标库样式
 import '../public/alIcon/iconfont.css'
-
+// 引入ElementUi
+import { MessageBox} from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+// 挂载到组件实例上
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
 // 注册三级联动组件为全局组件
 Vue.component(TypeNav.name, TypeNav)
 // 注册分页器组件为全局组件

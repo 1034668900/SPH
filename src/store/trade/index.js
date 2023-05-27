@@ -5,7 +5,8 @@ const state = {
     // 地址
     userAddress: [],
     // 订单列表
-    orderDetailList: []
+    orderDetailList: [],
+    orderInfo:{}
 }
 
 const mutations = {
@@ -15,8 +16,9 @@ const mutations = {
     },
 
     // 获取用户订单详情
-    GETORDERINFO(state, orderDetailList){
-        state.orderDetailList = orderDetailList
+    GETORDERINFO(state, orderInfo){
+        state.orderDetailList = orderInfo.data.detailArrayList
+        state.orderInfo = orderInfo
     }
 }
 
@@ -35,9 +37,8 @@ const actions = {
     // 获取订单交易页信息
     async getOrderInfo({commit}){
         let result = await reqOrderInfo()
-        console.log(result.data);
         if(result.data.code == 200){
-            commit('GETORDERINFO',result.data.data.detailArrayList
+            commit('GETORDERINFO',result.data
             )
         }
     }
