@@ -27,6 +27,12 @@ requests.interceptors.request.use((config) => {
         config.headers.userTempId = store.state.detail.uuid_token
     }
 
+    // 判断user仓库中是否有token，有的话就在请求头中携带token
+    let token = localStorage.getItem("USER_TOKEN")
+    if(token){
+        config.headers.token = token
+    }
+
     nprogress.start()
     return config
 

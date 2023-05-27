@@ -1,13 +1,23 @@
 // 引入路由组件
 import Home from '@/pages/Home/Home.vue'
 import Search from '@/pages/Search/index.vue'
-import Login from '@/pages/Login/Login.vue'
-import Register from '@/pages/Register/Register.vue'
+import Login from '@/pages/Login/index.vue'
+import Register from '@/pages/Register/index.vue'
 import Detail from '@/pages/Detail/index.vue'
 import AddCartSuccess from '@/pages/AddCartSuccess/index.vue'
 import ShopCart from '@/pages/ShopCart/index.vue'
+import Trade from '@/pages/Trade/index.vue'
 
 export default [
+    {
+        name:'trade',
+        path: '/trade',
+        component: Trade,
+        meta: {
+            // 是否显示Footer
+            isShowFooter: true
+        }
+    },
     {
         name:'shopcart',
         path: '/shopcart',

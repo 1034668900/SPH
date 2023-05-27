@@ -1,6 +1,4 @@
-import { reqShopCartList } from "@/api";
-import { deleteShopOfCart } from "@/api";
-import {reqChangeChecked} from '@/api'
+import { reqShopCartList,deleteShopOfCart,reqChangeChecked } from "@/api";
 
 const state = {
     //购物车数据

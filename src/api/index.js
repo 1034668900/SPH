@@ -52,3 +52,54 @@ export const reqChangeChecked = (skuId, isChecked) => requests({
     url: `/cart/checkCart/${skuId}/${isChecked}`,
     method: "GET"
 })
+
+// 获取验证码的接口地址
+// /api/user/passport/sendCode/{phone}  GET
+export const reqGetCode = (phone) => requests({
+    url: `/user/passport/sendCode/${phone}`,
+    method: 'GET'
+})
+
+// 用户注册的接口
+// /api/user/passport/register   POST    phone code password
+export const reqUserRegister = (data) => requests({
+    url: '/user/passport/register',
+    data,
+    method: 'POST'
+})
+
+// 用户登录的接口
+// /api/user/passport/login    POST   phone password
+export const reqUserLogin = (data) => requests({
+    url: '/user/passport/login',
+    data,
+    method: 'POST'
+})
+
+// 登录成功后获取用户信息
+// /api/user/passport/auth/getUserInfo   GET   请求头中得携带token
+export const reqGetUserInfo = () => requests({
+    url: '/user/passport/auth/getUserInfo',
+    method: 'GET'
+})
+
+// 退出登录
+// /api/user/passport/logout   GET
+export const reqUserLogout = () => requests({
+    url: '/user/passport/logout',
+    method: "GET"
+})
+
+// 获取用户地址信息
+// /api/user/userAddress/auth/findUserAddressList  GET
+export const reqUserAddress = () => requests({
+    url: '/user/userAddress/auth/findUserAddressList',
+    method: "GET"
+})
+
+// 获取订单交易页信息
+// /api/order/auth/trade   GET
+export const reqOrderInfo = () => requests({
+    url: '/order/auth/trade',
+    method: 'GET'
+})

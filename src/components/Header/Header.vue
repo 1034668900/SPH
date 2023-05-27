@@ -5,10 +5,14 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="!userName">
             <span>请</span>
             <router-link to="/login">登录</router-link>
             <router-link to="/register" class="register">免费注册</router-link>
+          </p>
+          <p v-else>
+            <a>{{ userName }} | </a>
+            <a @click="Logout">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -27,7 +31,7 @@
     <div class="bottom">
       <h1 class="logoArea">
         <!-- target="_blank" 会使得本次打开新开一个标签页 -->
-        <router-link class="logo" title="尚品汇" to="/home" >
+        <router-link class="logo" title="尚品汇" to="/home">
           <img src="./images/logo.png" alt="" />
         </router-link>
       </h1>
@@ -39,7 +43,11 @@
             id="autocomplete"
             class="input-error input-xxlarge"
           />
-          <button @click="goSearch" class="sui-btn btn-xlarge btn-danger" type="button">
+          <button
+            @click="goSearch"
+            class="sui-btn btn-xlarge btn-danger"
+            type="button"
+          >
             搜索
           </button>
         </form>
@@ -52,34 +60,51 @@
 export default {
   data() {
     return {
-      keyword: ''
-    }
+      keyword: "",
+    };
   },
-  methods:{
+  methods: {
     // 向Search路由跳转
     // push方法返回的是一个promise，
     // 通过传入两个不做处理的回调，解决控制台报跳转错误的问题(编程式路由重复跳转到当前路由(参数不变)时会报错)
-    goSearch(){
+    goSearch() {
       // 创建一个跳转对象
       let location = {
-        name: 'search',
-        params: {keyword:this.keyword || undefined}
-      }
+        name: "search",
+        params: { keyword: this.keyword || undefined },
+      };
       // 判断当前路由是否含有query参数
-      if(this.$route.query){
-        location.query = this.$route.query
-
+      if (this.$route.query) {
+        location.query = this.$route.query;
       }
       this.$router.push(location);
-    }
-  },
-  mounted(){
-    // 在全局事件总线上绑定清除搜索框的函数
-    this.$bus.$on('clearSearchValue', () => {
-      this.keyword = ''
-    })
-  }
+    },
 
+    // 退出登录
+    async Logout() {
+      try {
+        if (confirm("是否确认退出登录？")) {
+          // 派发action 退出登录
+          await this.$store.dispatch("userLogout");
+          // 重新进行路由跳转
+          this.$router.push("/home");
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+  },
+  mounted() {
+    // 在全局事件总线上绑定清除搜索框的函数
+    this.$bus.$on("clearSearchValue", () => {
+      this.keyword = "";
+    });
+  },
+  computed: {
+    userName() {
+      return this.$store.state.user.userInfo.loginName;
+    },
+  },
 };
 </script>
 
