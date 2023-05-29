@@ -95,10 +95,16 @@ export default {
         if (phone && password) {
           await this.$store.dispatch("userLogin", { phone, password });
         }
-        // 登录成功则进行路由跳转到home页面
-        this.$router.push("/home");
+        // 检查跳转至该登录路由的query参数中是否含有需要跳转的redirect字段
+        if (this.$route.query.redirect) {
+          this.$router.push(this.$route.query.redirect);
+        } else {
+          // 不含redirect字段
+          // 登录成功则进行路由跳转到home页面
+          this.$router.push("/home");
+        }
       } catch (error) {
-        alert(error.message)
+        alert(error.message);
       }
     },
   },
