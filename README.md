@@ -342,4 +342,84 @@ AddCartSuccess组件中从浏览器中取对应数据即可。
    
 
 
+## 图片懒加载
+- 利用vue-lazyload库可快速实现图片懒加载
+
+## 表单验证
+### 表单验证插件配置
+
+```js
+// VeeValidate插件表单验证区域
+import Vue from 'vue'
+import VeeValidate from 'vee-validate'
+// 引入中文
+import zh_CN from 'vee-validate/dist/locale/zh_CN'
+Vue.use(VeeValidate)
+
+// 表单验证
+VeeValidate.Validator.localize('zh_CN',{
+    messages:{
+        ...zh_CN.messages,
+        is: (failed) => `${failed}必须与密码相同` // 修改内置规则的message
+    },
+    attributes:{
+      // 将每个提示字段转换成中文
+        phone: '手机号',
+        code: '验证码',
+        password: '密码',
+        password: '确认密码',
+        agree: '协议'
+    }
+})
+
+// 自定义校验规则
+VeeValidate.Validator.extend('agree',{
+    validate: value => {
+        return value
+    },
+    getMessage: failed => failed + '必须同意'
+})
+
+```
+
+### 表单验证插件的使用
+
+```HTML
+   <label>手机号:</label>
+   <input v-model="phone"
+   placeholder="请输入你的手机号"
+   name="phone"
+   v-validate="{required:true , regex: /^1\d{10}$/}"
+   :class="{invalid: errors.has('phone')}"
+      />
+   <span class="error-msg">{{errors.first('phone')}}</span>
+
+   <!-- 确认密码的校验有点区别 -->
+   v-validate="{required:true, is:password}"
+```
+
+### 在所有的表单验证都通过后再允许注册
+
+```js
+   // 等待所有的表单验证成功，返回布尔值
+   const success = await this.$validator.validateAll();
+
+```
+
+## 路由懒加载
+- 当打包构建应用时，JavaScript 包会变得非常大，影响页面加载。如果我们能把不同路由对应的组件分割成不同的代码块，然后**当路由被访问的时候才加载对应组件**，这样就会更加高效。(因此后续路由都用**路由懒加载**)
+
+```js
+   // 将
+   // import UserDetails from './views/UserDetails.vue'
+   // 替换成
+   const UserDetails = () => import('./views/UserDetails.vue')
+
+   const router = createRouter({
+   // ...
+   routes: [{ path: '/users/:id', component: UserDetails }],
+   })
+```
+
+
 

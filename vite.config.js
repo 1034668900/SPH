@@ -22,6 +22,7 @@ export default defineConfig({
     proxy:{
       "/api": {
         target: 'http://gmall-h5-api.atguigu.cn',
+        // 访问源可变(服务器域名是啥这就是啥)
         changeOrigin:true
       }
 

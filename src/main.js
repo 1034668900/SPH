@@ -28,6 +28,8 @@ Vue.config.productionTip = false
 // 请求三级联动列表数据
 reqCategoryList()
 
+// 引入表单验证插件,只需要其执行
+import '@/plugins/validate.js'
 
 new Vue({
     render: h => h(App),

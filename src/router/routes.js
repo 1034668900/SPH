@@ -1,5 +1,4 @@
 // 引入路由组件
-import Home from "@/pages/Home/Home.vue";
 import Search from "@/pages/Search/index.vue";
 import Login from "@/pages/Login/index.vue";
 import Register from "@/pages/Register/index.vue";
@@ -111,7 +110,7 @@ export default [
   },
   {
     path: "/home",
-    component: Home,
+    component: () => import('@/pages/Home/Home.vue'),
     meta: {
       // 是否显示Footer
       isShowFooter: true,
