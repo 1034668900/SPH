@@ -75,7 +75,7 @@
             // 在嵌套函数内使用上一层函数的变量，形成闭包
             timer = setTimeout(()=>{
                 // 调用传入的回调
-                cb()
+                cb.apply(this,arguments)
             },delayTime)
         }
     }
